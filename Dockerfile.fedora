@@ -32,7 +32,7 @@ COPY sudoers.usersetup /etc/
 # The usersetup user is solely for adding a new user that has the same uid,
 # as the workspace. 70 is an arbitrary *low* unused uid on debian.
 RUN dnf -y update && \
-    dnf -y install python-pip python3-pip sudo sqlite tzdata && \
+    dnf -y install python-pip python3-pip sudo sqlite tzdata iptables iputils && \
     userdel -r yoctouser && \
     groupadd -g 70 usersetup && \
     useradd -N -m -u 70 -g 70 usersetup && \
