@@ -45,6 +45,11 @@ RUN apt-get -y update && \
         /usr/bin/restrict_groupadd.sh \
         /usr/bin/restrict_useradd.sh && \
     echo "#include /etc/sudoers.usersetup" >> /etc/sudoers
+ENV TZ 'Europe/Oslo'
+RUN echo $TZ > /etc/timezone && \
+    rm /etc/localtime && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+
 
 # Install the toaster requirements.
 ARG BRANCH
@@ -55,6 +60,7 @@ RUN git clone $GITREPO --depth=1 --branch=$BRANCH /home/usersetup/poky && \
 
 USER usersetup
 ENV LANG=en_US.UTF-8
+
 RUN primetoaster.sh /home/usersetup /home/usersetup/poky
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/usr/bin/toaster-entry.py"]
