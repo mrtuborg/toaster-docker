@@ -32,10 +32,10 @@ COPY sudoers.usersetup /etc/
 # The usersetup user is solely for adding a new user that has the same uid,
 # as the workspace. 70 is an arbitrary *low* unused uid on debian.
 RUN dnf -y update && \
-    dnf -y install python-pip python3-pip sudo sqlite tzdata iptables iputils && \
+    dnf -y install python-pip sudo sqlite tzdata iptables iputils python3-django && \
     userdel -r yoctouser && \
-    groupadd -g 70 usersetup && \
-    useradd -N -m -u 70 -g 70 usersetup && \
+    groupadd -g 1000 usersetup && \
+    useradd -N -m -u 1000 -g 1000 usersetup && \
     chmod 755 /usr/bin/primetoaster.sh \
         /usr/bin/usersetup.py \
         /usr/bin/toaster-launch.sh \
@@ -57,8 +57,9 @@ RUN git clone $GITREPO --depth=1 --branch=$BRANCH /home/usersetup/poky && \
 # to break Toaster.  Releases other than those above override the   #
 # ALLOWED_HOSTS to keep the older default behavior. See             #
 # bitbake/lib/toaster/toastermain/settings.py for more information  #
-    pipinstall.sh /home/usersetup/poky/bitbake && pip install django==1.8.15
-#   pip uninstall -y django && pip install django==1.8.15
+    pipinstall.sh /home/usersetup/poky/bitbake
+# && \
+#    pip uninstall -y django && pip install django==1.9
 ######### END OF WORKAROUND ##########
 
 USER usersetup
